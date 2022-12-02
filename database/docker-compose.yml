@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:alpine3.17
+    container_name: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - db-store:${DB_STORE}
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+volumes:
+  db-store:
