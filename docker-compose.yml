@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:alpine3.17
+    container_name: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - db-store:${DB_STORE}
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+  frontend:
+    image: node:19.2-bullseye-slim
+    container_name: frontend
+    volumes:
+      - ${PROJECT_ROOT_PATH}/frontend/:/app/
+    command: bash -c "cd app/ && npm start"
+    ports:
+      - 3000:3000
+  graphql:
+    image: node:19.2-bullseye-slim
+    container_name: graphql
+    volumes:
+      - ${PROJECT_ROOT_PATH}/graphql/:/app/
+    command: bash -c "cd app/ && npm start"
+    ports:
+      - 4000:4000
+    
+volumes:
+  db-store:
