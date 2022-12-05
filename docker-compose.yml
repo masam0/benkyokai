@@ -14,7 +14,7 @@ services:
     image: node:19.2-bullseye-slim
     container_name: frontend
     volumes:
-      - ${PROJECT_ROOT}/frontend/:/app/
+      - ${PROJECT_ROOT_PATH}/frontend/:/app/
     command: bash -c "cd app/ && npm start"
     ports:
       - 3000:3000
@@ -22,7 +22,7 @@ services:
     image: node:19.2-bullseye-slim
     container_name: graphql
     volumes:
-      - ${PROJECT_ROOT}/graphql/:/app/
+      - ${PROJECT_ROOT_PATH}/graphql/:/app/
     command: bash -c "cd app/ && npm start"
     ports:
       - 4000:4000
