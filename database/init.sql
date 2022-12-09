@@ -9,7 +9,7 @@ CREATE TABLE article (
 );
 CREATE TABLE category (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(20) NOT NULL,
+  name VARCHAR(20) NOT NULL
 );
 CREATE TABLE category_article (
   id SERIAL PRIMARY KEY,
@@ -22,5 +22,5 @@ CREATE TABLE category_article (
 CREATE TABLE article_image (
   id SERIAL PRIMARY KEY,
   article_id int NOT NULL,
-  image_url text NOT NULL,
+  image_url text NOT NULL
 );
