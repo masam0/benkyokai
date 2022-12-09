@@ -1,30 +1,72 @@
-import express from 'express'
-import { Express } from 'express'
-import { graphqlHTTP } from 'express-graphql'
-import { buildSchema, GraphQLSchema } from 'graphql'
+require('dotenv').config()
+const express = require('express')
+const { graphqlHTTP } = require('express-graphql')
+const graphql = require('graphql')
+const joinMonster = require('join-monster')
+const { Client } = require('pg')
 
-// Construct a schema, using GraphQL schema language
-const schema: GraphQLSchema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`)
+const client = new Client({
+  host: process.env.POSTGRES_HOST,
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DATABASE,
+})
+client.connect()
 
-// The root provides a resolver function for each API endpoint
-const root = {
-  hello: () => {
-    return 'Hello world!'
+const Article = new graphql.GraphQLObjectType({
+  name: 'Article',
+  extensions: {
+    joinMonster: {
+      sqlTable: 'article',
+      uniqueKey: 'id',
+    },
   },
-}
+  fields: () => ({
+    id: { type: graphql.GraphQLInt },
+    title: { type: graphql.GraphQLString },
+    summary: { type: graphql.GraphQLString },
+    content: { type: graphql.GraphQLString },
+    posted_at: { type: graphql.GraphQLString },
+    updated_at: { type: graphql.GraphQLString },
+  }),
+})
 
-const app: Express = express()
+const QueryRoot = new graphql.GraphQLObjectType({
+  name: 'Query',
+  fields: () => ({
+    hello: {
+      type: graphql.GraphQLString,
+      resolve: () => 'Hello world!',
+    },
+    articles: {
+      type: new graphql.GraphQLList(Article),
+      resolve: (parent, args, context, resolveInfo) => {
+        return joinMonster.default(resolveInfo, {}, (sql) => {
+          return client.query(sql)
+        })
+      },
+    },
+    article: {
+      type: Article,
+      args: { id: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) } },
+      where: (articleTable, args, context) => `${articleTable}.id = ${args.id}`,
+      resolve: (parent, args, context, resolveInfo) => {
+        return joinMonster.default(resolveInfo, {}, (sql) => {
+          return client.query(sql)
+        })
+      },
+    },
+  }),
+})
+
+const schema = new graphql.GraphQLSchema({ query: QueryRoot })
+
+const app = express()
 app.use(
-  '/graphql',
+  '/api',
   graphqlHTTP({
     schema: schema,
-    rootValue: root,
     graphiql: true,
   })
 )
 app.listen(4000)
-console.log('Running a GraphQL API server at http://localhost:4000/graphql')
