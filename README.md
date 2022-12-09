@@ -17,16 +17,16 @@
 
 1. プロジェクトルートで `docker-compose up -d`を実行
 2. React と graphql の動作確認
-   a. ブラウザを開き、 http://localhost:4000 にアクセスし、React が動作していることを確認する
-   b. ブラウザを開き、 http://localhost:3000/api にアクセスし、graphql サーバーが動作していることを確認する
+   1. ブラウザを開き、 http://localhost:4000 にアクセスし、React が動作していることを確認する
+   2. ブラウザを開き、 http://localhost:3000/api にアクセスし、graphql サーバーが動作していることを確認する
 3. postgresql の動作確認
-   a. pgAdmin を開く
-   b. Servers を右クリック
-   c. Register > Server を選択
-   d. General タブの Name は任意の値に設定
-   e. Connection Host name / address には "localhost"を入力
-   f. password には postgres に設定したパスワードを入力
-   g. Save をクリック
+   1. pgAdmin を開く
+   2. Servers を右クリック
+   3. Register > Server を選択
+   4. General タブの Name は任意の値に設定
+   5. Connection Host name / address には "localhost"を入力
+   6. password には postgres に設定したパスワードを入力
+   7. Save をクリック
 
 ### Prettier の設定
 
