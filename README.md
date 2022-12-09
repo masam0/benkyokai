@@ -17,8 +17,8 @@
 
 1. プロジェクトルートで `docker-compose up -d`を実行
 2. React と graphql の動作確認
-   1. ブラウザを開き、 http://localhost:4000 にアクセスし、React が動作していることを確認する
-   2. ブラウザを開き、 http://localhost:3000/api にアクセスし、graphql サーバーが動作していることを確認する
+   1. ブラウザを開き、 http://localhost:3000 にアクセスし、React が動作していることを確認する
+   2. ブラウザを開き、 http://localhost:4000/api にアクセスし、graphql サーバーが動作していることを確認する
 3. postgresql の動作確認
    1. pgAdmin を開く
    2. Servers を右クリック
