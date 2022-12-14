@@ -1,9 +1,11 @@
+import { GraphQLObjectType } from 'graphql'
+import joinMonster from 'join-monster'
+import express from 'express'
+import { graphqlHTTP } from 'express-graphql'
+import * as graphql from 'graphql'
+import { Client } from 'pg'
+
 require('dotenv').config()
-const express = require('express')
-const { graphqlHTTP } = require('express-graphql')
-const graphql = require('graphql')
-const joinMonster = require('join-monster')
-const { Client } = require('pg')
 
 const client = new Client({
   host: process.env.POSTGRES_HOST,
@@ -13,7 +15,7 @@ const client = new Client({
 })
 client.connect()
 
-const Article = new graphql.GraphQLObjectType({
+const Article: GraphQLObjectType = new graphql.GraphQLObjectType({
   name: 'Article',
   extensions: {
     joinMonster: {
@@ -31,7 +33,7 @@ const Article = new graphql.GraphQLObjectType({
   }),
 })
 
-const QueryRoot = new graphql.GraphQLObjectType({
+const QueryRoot: GraphQLObjectType = new graphql.GraphQLObjectType({
   name: 'Query',
   fields: () => ({
     hello: {
@@ -41,7 +43,7 @@ const QueryRoot = new graphql.GraphQLObjectType({
     articles: {
       type: new graphql.GraphQLList(Article),
       resolve: (parent, args, context, resolveInfo) => {
-        return joinMonster.default(resolveInfo, {}, (sql) => {
+        return joinMonster(resolveInfo, {}, (sql: any) => {
           return client.query(sql)
         })
       },
@@ -49,9 +51,10 @@ const QueryRoot = new graphql.GraphQLObjectType({
     article: {
       type: Article,
       args: { id: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) } },
-      where: (articleTable, args, context) => `${articleTable}.id = ${args.id}`,
-      resolve: (parent, args, context, resolveInfo) => {
-        return joinMonster.default(resolveInfo, {}, (sql) => {
+      where: (articleTable: string, args: any, context: any) =>
+        `${articleTable}.id = ${args.id}`,
+      resolve: (parent: any, args: any, context: any, resolveInfo) => {
+        return joinMonster(resolveInfo, {}, (sql: any) => {
           return client.query(sql)
         })
       },
