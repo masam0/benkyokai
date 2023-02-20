@@ -1,4 +1,4 @@
-export const books = [
+const articles = [
   {
     id: 1,
     title: '今日のこと',
@@ -18,3 +18,5 @@ export const books = [
     likes: 20,
   },
 ]
+
+export default articles
